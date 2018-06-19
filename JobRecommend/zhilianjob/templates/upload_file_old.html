@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .divForm{
+        position: absolute;/*绝对定位*/
+        width: 300px;
+        height: 200px;
+
+        {#border: 1px solid red;#}
+        text-align: center;/*(让div中的内容居中)*/
+        top: 50%;
+        left: 50%;
+        margin-top: -200px;
+        margin-left: -150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="divForm">
+        <div class="row">
+              <div class="col-md-8 col-md-offset-2">
+                  <form class="form-inline" role="form"  method="post" enctype="multipart/form-data" accept-charset="utf-8">
+                      {% csrf_token %}
+                      <div class="form-group">
+                          <input type="file" name="file">
+                      </div>
+                      <div class="form-group">
+                          <input type="submit" value="上传简历">
+                      </div>
+                      支持简历格式：doc,docx,pdf
+                  </form>
+              </div>
+        </div>
+    </div>
+</body>
+</html>

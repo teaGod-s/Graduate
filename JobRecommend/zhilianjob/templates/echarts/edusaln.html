@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>不同学历薪资分布</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	{% include 'basic/cssjs.html' %}
+
+	 <!-- 引入Jquery包 -->
+  	<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
+
+  	<!-- 引入Echarts3包 -->
+    <script src="/static/js/echarts.min.js"></script>
+
+</head>
+
+<body>
+
+	    {% include 'basic/top.html' %}
+        {% csrf_token %}
+
+	<!-- content start -->
+	<div class="container-fluid">
+		<div class="row-fluid">
+
+			<div class="span3">
+				<!-- left navbar start -->
+				{% include 'basic/left.html' %}
+				<!-- left navbar end -->
+			</div>
+
+			<!-- right content start -->
+			<div class="span9">
+{#				<div class="session well">堆叠柱状图以坐标轴上的长方形元素作为变量，从多个维度解释数据，以此来达到展现并比较数据情况的目的</div>#}
+                <div class="session well">数据来源：智联招聘网站</div>
+				<div class="session">
+					<div id="main" style="width: 100%;height:600px;"></div>
+				</div>
+
+			</div>
+			<!-- right content end -->
+		</div>
+	</div>
+	<!-- content end -->
+</body>
+</html>
+<script type="text/javascript">
+	        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+	    var mapEducationNum_8000_10000 = [];
+	    var mapEducationNum_6000_8000 = [];
+	    var mapEducationNum_4000_6000 = [];
+	    var mapEducationNum_10000_15000 = [];
+	    var mapEducationNum_2000_4000 = [];
+	    var mapEducationNum_face = [];
+	    var mapEducationNum_10000_20000 = [];
+	    var mapEducationNum_1000 = [];
+	    var mapEducationNum_3300_4500 = [];
+	    var mapEducationNum_other = [];
+        var mapOnlyEducation = ['不限','中专','中技','其他','博士','大专','本科','硕士','高中']
+
+        var index = 0;
+        {% for i in list_8000_10000 %}
+            mapEducationNum_8000_10000[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_6000_8000 %}
+            mapEducationNum_6000_8000[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_4000_6000 %}
+            mapEducationNum_4000_6000[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_10000_15000 %}
+            mapEducationNum_10000_15000[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_2000_4000 %}
+            mapEducationNum_2000_4000[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_face %}
+            mapEducationNum_face[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_10000_20000 %}
+            mapEducationNum_10000_20000[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_1000 %}
+            mapEducationNum_1000[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_3300_4500 %}
+            mapEducationNum_3300_4500[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_other %}
+            mapEducationNum_other[index] = {"value":'{{ i.num }}', "name": '{{ i.education }}'}
+            index++
+        {% endfor %}
+
+        myChart.setOption({
+            tooltip : {
+                    trigger: 'axis',
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+               color:['#48cda6','#fd87ab','#11abff','#ffdf33','#968ade','#74dea1','#de8c14','#de382a','#a60471','#00e420'],
+               legend: {
+                    data: ['8001-10000元/月', '6001-8000元/月', '4001-6000元/月', '10001-15000元/月', '2001-4000元/月', '面议', '10000-20000元/月',
+                        '1000-1001元/月', '3300-4500元/月', '其他']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis:  {
+                    type: 'value'
+                },
+                yAxis: {
+                    type: 'category',
+                    data: mapOnlyEducation
+                },
+                series: [
+                    {
+                        name: '8001-10000元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_8000_10000
+                    },
+                    {
+                        name: '6001-8000元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_6000_8000
+                    },
+                    {
+                        name: '4001-6000元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_4000_6000
+                    },
+                    {
+                        name: '10001-15000元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_10000_15000
+                    },
+                    {
+                        name: '2001-4000元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_2000_4000
+                    },
+                    {
+                        name: '面议',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_face
+                    },
+                    {
+                        name: '10000-20000元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_10000_20000
+                    },
+                    {
+                        name: '1000-1001元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_1000
+                    },
+                    {
+                        name: '3300-4500元/月',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_3300_4500
+                    },
+                    {
+                        name: '其他',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapEducationNum_other
+                    }
+                ]
+        });
+</script>

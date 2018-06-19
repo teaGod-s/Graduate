@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>各个工作地点的学历分布</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	{% include 'basic/cssjs.html' %}
+	
+	 <!-- 引入Jquery包 -->
+  	<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
+
+  	<!-- 引入Echarts3包 -->
+    <script src="/static/js/echarts.min.js"></script>
+
+</head>
+
+<body>
+
+	    {% include 'basic/top.html' %}
+        {% csrf_token %}
+
+	<!-- content start -->
+	<div class="container-fluid">
+		<div class="row-fluid">
+		
+			<div class="span3">
+				<!-- left navbar start -->
+				{% include 'basic/left.html' %}
+				<!-- left navbar end -->
+			</div>
+			
+			<!-- right content start -->
+			<div class="span9">
+{#				<div class="session well">折线图适合用来展现某个项目的发展趋势，或展现并比较多个项目的发展趋势。</div>#}
+                <div class="session well">数据来源：智联招聘网站</div>
+				<div class="session">
+					<div id="main" style="width: 100%;height:600px;"></div>
+				</div>
+				
+			</div>
+			<!-- right content end -->
+		</div>
+	</div>
+	<!-- content end -->
+</body>
+</html>
+<script type="text/javascript">
+	        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+	    var mapWorkplaceNum_buxian = [];
+	    var mapWorkplaceNum_zhongzhuan = [];
+	    var mapWorkplaceNum_zhongji = [];
+	    var mapWorkplaceNum_qita = [];
+	    var mapWorkplaceNum_boshi = [];
+	    var mapWorkplaceNum_dazhuan = [];
+	    var mapWorkplaceNum_benke = [];
+	    var mapWorkplaceNum_shuoshi = [];
+	    var mapWorkplaceNum_gaozhong = [];
+	    {#var mapOnlyWorkplace = ['上海','其他','北京','大连','天津','广州','成都','杭州','武汉','深圳', '西安']#}
+        var mapOnlyWorkplace = ['西安','深圳','武汉','杭州','成都','广州','天津','大连','北京','其他', '上海']
+
+        var index = 0;
+        {% for i in list_buxian %}
+            mapWorkplaceNum_buxian[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_zhongzhuan %}
+            mapWorkplaceNum_zhongzhuan[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_zhongji %}
+            mapWorkplaceNum_zhongji[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_qita %}
+            mapWorkplaceNum_qita[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_boshi %}
+            mapWorkplaceNum_boshi[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_dazhuan %}
+            mapWorkplaceNum_dazhuan[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_benke %}
+            mapWorkplaceNum_benke[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_shuoshi %}
+            mapWorkplaceNum_shuoshi[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        var index = 0;
+        {% for i in list_gaozhong %}
+            mapWorkplaceNum_gaozhong[index] = {"value":'{{ i.num }}', "name": '{{ i.workplace }}'}
+            index++
+        {% endfor %}
+
+        myChart.setOption({
+            tooltip : {
+                    trigger: 'axis',
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+               color:['#c23531','#fd87ab','#ca8622','#61a0a8','#25252f','#a60471','#00e420','#00cede','#ecff00'],
+               legend: {
+                    data: ['博士', '高中', '硕士', '中技', '中专', '本科', '不限', '大专', '其他']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis:  {
+                    type: 'value'
+                },
+                yAxis: {
+                    type: 'category',
+                    data: mapOnlyWorkplace
+                },
+                series: [
+                    {
+                        name: '不限',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_buxian
+                    },
+                    {
+                        name: '中专',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_zhongzhuan
+                    },
+                    {
+                        name: '中技',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_zhongji
+                    },
+                    {
+                        name: '其他',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_qita
+                    },
+                    {
+                        name: '博士',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_boshi
+                    },
+                    {
+                        name: '大专',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_dazhuan
+                    },
+                    {
+                        name: '本科',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_benke
+                    },
+                    {
+                        name: '硕士',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_shuoshi
+                    },
+                    {
+                        name: '高中',
+                        type: 'bar',
+                        stack: '总量',
+                        label: {
+                            normal: {
+                                {#show: true,#}
+                                position: 'insideRight'
+                            }
+                        },
+                        data: mapWorkplaceNum_gaozhong
+                    }
+                ]
+        });
+</script>

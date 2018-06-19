@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>需求最高的十个岗位</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	 {% include 'basic/cssjs.html' %}
+
+	 <!-- 引入Jquery包 -->
+  	<script type="text/javascript" src="/static/js/jquery-2.1.4.min.js"></script>
+	
+  	<!-- 引入Echarts3包 -->
+    <script src="/static/js/echarts.min.js"></script>
+</head>
+
+<body>
+
+	    {% include 'basic/top.html' %}
+        {% csrf_token %}
+	<!-- content start -->
+	<div class="container-fluid">
+		<div class="row-fluid">
+		
+			<div class="span3">
+				<!-- left navbar start -->
+				{% include 'basic/left.html' %}
+				<!-- left navbar end -->
+			</div>
+			
+			<!-- right content start -->
+			<div class="span9">
+{#				<div class="session well">柱状图以坐标轴上的长方形元素作为变量，以此来达到展现并比较数据情况的目的</div>#}
+                <div class="session well">数据来源：智联招聘网站</div>
+				<div class="session">
+					<div id="main" style="width: 100%;height:600px;"></div>
+				</div>
+				
+			</div>
+			<!-- right content end -->
+		</div>
+	</div>
+	<!-- content end -->
+</body>
+</html>
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var mapOnlyKey = [];
+	    var mapKeyValue = [];
+	    var mapOnlyValue = [];
+        var index = 0;
+
+        {% for i in posin_list %}
+            mapOnlyKey[index] = '{{ i.position }}'
+            mapKeyValue[index] = {"value":Math.round({{ i.num }}), "name": '{{ i.position }}'}
+            mapOnlyValue[index] = {{ i.num }}
+            index++
+        {% endfor %}
+
+        myChart.setOption({
+            title: {
+                text: '需求最高的十个岗位'
+            },
+            tooltip: {
+                show: true
+            },
+            legend: {
+                data:mapOnlyKey
+            },
+            xAxis : [
+                {
+                    name: '岗位',
+                    type : 'category',
+                    data : mapOnlyKey
+                }
+            ],
+            yAxis : [
+                {
+                    name: '数量',
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'数量',
+                    type:'bar',
+                    data: mapKeyValue
+                }
+            ]
+        });
+
+    </script>
